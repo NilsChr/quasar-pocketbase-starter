@@ -50,8 +50,8 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history',
       env: {
-        API: ctx.dev ? "https://blogal.pockethost.io" : "NO API URL SET",
-        BASE_URL: ctx.dev ? "http://localhost:8080" : "NO BASE URL SET"
+        API: ctx.dev ? "https://blogal.pockethost.io" : "https://blogal.pockethost.io",
+        BASE_URL: ctx.dev ? "http://localhost:8080" : "https://blogal-2.onrender.com"
       }
 
       // transpile: false,
