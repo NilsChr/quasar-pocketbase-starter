@@ -1,0 +1,7 @@
+MARKDOWN EDITOR:
+https://github.com/imzbf/md-editor-v3
+
+documents have many tags used for searching but only one project-tag
+
+Tags = Used for searching
+ProjectTag = Used for grouping
