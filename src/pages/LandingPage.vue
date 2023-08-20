@@ -68,7 +68,7 @@ const authWithPassword = async () => {
 }
 
 const authWithOAuth2 = async (provider: AuthProviderInfo) => {
-    const redirectUrl = process.env.BASE_URL + "/redirect";
+    const redirectUrl = process.env.BASE_URL + "/#/redirect";
     localStorage.setItem("provider", JSON.stringify(provider));
     window.location.href = provider.authUrl + redirectUrl;
 }
