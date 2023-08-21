@@ -39,8 +39,21 @@
           </div>
         </div>
         <div class="col-10 q-pa-sm" style="overflow-y: scroll;">
+
           <q-list bordered separator>
-            <q-item clickable v-ripple v-for="doc in documents" :key="doc.id" @click="setActiveDoc(doc)">
+            <q-expansion-item v-for="folder in uniqueFolders" icon="folder" expand-separator :label="folder"
+              caption="TODO: x documents " :content-inset-level="0.25">
+
+              <q-list separator >
+                <q-item clickable v-ripple v-for="doc in filteredDocuments.filter(d => d.folder === folder)" :key="doc.id" @click="setActiveDoc(doc)">
+                  <q-item-section> {{ doc.title }}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
+          </q-list>
+
+          <q-list bordered separator>
+            <q-item clickable v-ripple v-for="doc in documentsWithoutFolder" :key="doc.id" @click="setActiveDoc(doc)">
               <q-item-section> {{ doc.title }}</q-item-section>
             </q-item>
           </q-list>
@@ -60,7 +73,7 @@ import { storeToRefs } from 'pinia';
 import LogoPage from 'src/components/LogoPage.vue';
 import { useDBStore } from 'src/stores/dbStore';
 import { useUserStore } from 'src/stores/userStore';
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { Record } from 'pocketbase';
 
@@ -88,6 +101,28 @@ const setActiveDoc = (doc: any) => {
   router.push({ path: "/dashboard" });
 
 }
+
+const documentsWithoutFolder = computed(() => {
+  const docsWithoutFolder =  documents.value.filter(d => d.folder === "");
+  if(searchTitle.value === null || searchTitle.value === "") return docsWithoutFolder;
+  return docsWithoutFolder.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
+})
+
+const filteredDocuments = computed(() => {
+  if(searchTitle.value === null || searchTitle.value === "") return documents.value;
+  return  documents.value.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
+})
+
+const uniqueFolders = computed(() => {
+  const set = new Set<string>();
+  const noSearch = searchTitle.value === null || searchTitle.value === "";
+  documents.value.filter(d => d.folder !== "").forEach(d => {
+    if(noSearch || d.title.toLowerCase().includes(searchTitle.value.toLowerCase())) {
+      set.add(d.folder);
+    }
+  })
+  return Array.from(set);
+})
 
 onMounted(() => {
   dbStore.loadDocuments();

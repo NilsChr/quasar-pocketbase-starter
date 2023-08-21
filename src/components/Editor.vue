@@ -29,10 +29,10 @@
             </div>
         </div>
 
-        <div class="row col">
+        <div class="row col full-height">
             <md-editor v-if="editMode" v-model="documentData" @onChange="" @onUploadImg="onUploadImg" language="en-US"
-                class="fill-height" />
-            <MdPreview v-else :modelValue="documentData" />
+                class="full-height" />
+            <MdPreview  class="full-height" v-else :modelValue="documentData" language="en-US"/>
         </div>
     </div>
     <div v-else class="row justify-center align-center items-center fill-height full-width">
