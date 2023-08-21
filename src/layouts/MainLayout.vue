@@ -127,13 +127,10 @@ const documentsWithoutFolder = computed(() => {
   }
 
   return filtered;
-  //if(searchTitle.value === null || searchTitle.value === "") return docsWithoutFolder;
-  //return docsWithoutFolder.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
+
 })
 
 const filteredDocuments = computed(() => {
-  //if(searchTitle.value === null || searchTitle.value === "") return documents.value;
-  //return  documents.value.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
   const filtered = [];
   for (let doc of documents.value) {
     let titleMatch = doc.title.toLowerCase().includes(searchTitle.value.toLowerCase());
@@ -152,9 +149,7 @@ const uniqueFolders = computed(() => {
   const set = new Set<string>();
   const noSearch = searchTitle.value === null || searchTitle.value === "";
   documents.value.filter(d => d.folder !== "").forEach(doc => {
-    /*if(noSearch || d.title.toLowerCase().includes(searchTitle.value.toLowerCase())) {
-      set.add(d.folder);
-    }*/
+
     let titleMatch = doc.title.toLowerCase().includes(searchTitle.value.toLowerCase());
     if (searchTitle.value === null || searchTitle.value === "") titleMatch = true;
 
@@ -168,9 +163,7 @@ const uniqueFolders = computed(() => {
 
 onMounted(() => {
   dbStore.loadDocuments();
-  console.log('USER', user)
 })
-//@request.auth.id != "" && (owner ?= @request.auth.id || editor.id ?=  @request.auth.id) 
 </script>
 
 <style scoped>

@@ -85,7 +85,6 @@ export const useDBStore = defineStore("dbStore", {
       tags: string
     ) {
       this.loading = true;
-      // example update data
       const updates = {
         title,
         folder,
@@ -113,6 +112,7 @@ export const useDBStore = defineStore("dbStore", {
       this.loading = true;
       await client.collection("documentsMeta").delete(id);
       this.activeDoc = null;
+      this.editMode = false;
       this.loading = false;
       this.loadDocuments();
     },

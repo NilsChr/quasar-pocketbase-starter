@@ -68,9 +68,11 @@ const tempFolder = ref<string>("Folder");
 const tempTags = ref<string>("Tags");
 const tempText = ref<string>("Testing");
 
+/*
 const onUploadImg = (files: any[]) => {
     console.log(Array.from(files));
 }
+*/
 
 const onTitleChanged = (val: string) => {
     title.value = val;
@@ -155,6 +157,40 @@ watch(() => editMode.value, () => {
     }
     setStyle()
 })
+
+function encodeImageToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.result && typeof reader.result === 'string') {
+        resolve(reader.result);
+      } else {
+        reject(new Error('Failed to read file as base64.'));
+      }
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+const onUploadImg = async (files:any, callback:any) => {
+  
+  const res = await Promise.all(
+    files.map((file: any) => {
+        return encodeImageToBase64(file);
+    })
+  );
+
+  
+  callback(res.map((item) => item));
+
+ console.log(files);
+};
 
 </script>
 <style>
