@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-
+        <q-separator />
         <div class="row col full-height" v-if="!loading">
             <md-editor v-if="editMode" v-model="documentData" @onChange="" @onUploadImg="onUploadImg" language="en-US"
                 class="full-height" />

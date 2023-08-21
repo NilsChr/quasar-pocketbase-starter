@@ -49,7 +49,7 @@
 
           <q-list bordered separator dense>
             <q-expansion-item dense v-for="folder in uniqueFolders" icon="folder" expand-separator :label="folder"
-              caption="TODO: x documents " :content-inset-level="0.25">
+               :content-inset-level="0.25">
 
               <q-list separator dense>
                 <q-item dense clickable v-ripple v-for="doc in filteredDocuments.filter(d => d.folder === folder)"
