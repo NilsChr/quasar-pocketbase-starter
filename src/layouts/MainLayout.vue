@@ -4,13 +4,20 @@
       <q-toolbar>
 
         <q-btn class="lt-md" dense flat round icon="menu" @click="toggleLeftDrawer" />
-        <q-toolbar-title class="row">
-          <LogoPage :width="30" />
+        <q-toolbar-title class="row" style="font-family: serif;">
+          <!--
+            <LogoPage :width="30" />
+          -->
+          <img src="../assets/blogal_logo.png" style="width:30px" />
           Blogal
         </q-toolbar-title>
 
         <q-avatar @click="toSettings">
-          <img :src="img">
+          <!--
+
+            <img :src="img">
+          -->
+          <q-icon name="settings" size="sm"></q-icon>
         </q-avatar>
 
       </q-toolbar>
@@ -40,21 +47,25 @@
         </div>
         <div class="col-10 q-pa-sm" style="overflow-y: scroll;">
 
-          <q-list bordered separator>
-            <q-expansion-item v-for="folder in uniqueFolders" icon="folder" expand-separator :label="folder"
+          <q-list bordered separator dense>
+            <q-expansion-item dense v-for="folder in uniqueFolders" icon="folder" expand-separator :label="folder"
               caption="TODO: x documents " :content-inset-level="0.25">
 
-              <q-list separator >
-                <q-item clickable v-ripple v-for="doc in filteredDocuments.filter(d => d.folder === folder)" :key="doc.id" @click="setActiveDoc(doc)">
-                  <q-item-section> {{ doc.title }}</q-item-section>
+              <q-list separator dense>
+                <q-item dense clickable v-ripple v-for="doc in filteredDocuments.filter(d => d.folder === folder)"
+                  :key="doc.id" @click="setActiveDoc(doc)">
+                  
+                  <q-item-section :class="{'active-doc': doc === activeDoc}"> {{ doc.title }}</q-item-section>
                 </q-item>
               </q-list>
             </q-expansion-item>
           </q-list>
 
-          <q-list bordered separator>
-            <q-item clickable v-ripple v-for="doc in documentsWithoutFolder" :key="doc.id" @click="setActiveDoc(doc)">
-              <q-item-section> {{ doc.title }}</q-item-section>
+          <q-list bordered separator dense>
+            <q-item dense clickable v-ripple v-for="doc in documentsWithoutFolder" :key="doc.id"
+              @click="setActiveDoc(doc)">
+
+              <q-item-section  :class="{'active-doc': doc === activeDoc}"> {{ doc.title }}</q-item-section>
             </q-item>
           </q-list>
         </div>
@@ -103,23 +114,54 @@ const setActiveDoc = (doc: any) => {
 }
 
 const documentsWithoutFolder = computed(() => {
-  const docsWithoutFolder =  documents.value.filter(d => d.folder === "");
-  if(searchTitle.value === null || searchTitle.value === "") return docsWithoutFolder;
-  return docsWithoutFolder.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
+  const docsWithoutFolder = documents.value.filter(d => d.folder === "");
+  const filtered = [];
+  for (let doc of docsWithoutFolder) {
+    let titleMatch = doc.title.toLowerCase().includes(searchTitle.value.toLowerCase());
+    if (searchTitle.value === null || searchTitle.value === "") titleMatch = true;
+
+    let tagsMatch = doc.tags.toLowerCase().includes(searchTags.value.toLowerCase());
+    if (searchTags.value === null || searchTags.value === "") tagsMatch = true;
+
+    if (titleMatch && tagsMatch) filtered.push(doc);
+  }
+
+  return filtered;
+  //if(searchTitle.value === null || searchTitle.value === "") return docsWithoutFolder;
+  //return docsWithoutFolder.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
 })
 
 const filteredDocuments = computed(() => {
-  if(searchTitle.value === null || searchTitle.value === "") return documents.value;
-  return  documents.value.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
+  //if(searchTitle.value === null || searchTitle.value === "") return documents.value;
+  //return  documents.value.filter(d => d.title.toLowerCase().includes(searchTitle.value.toLowerCase()));
+  const filtered = [];
+  for (let doc of documents.value) {
+    let titleMatch = doc.title.toLowerCase().includes(searchTitle.value.toLowerCase());
+    if (searchTitle.value === null || searchTitle.value === "") titleMatch = true;
+
+    let tagsMatch = doc.tags.toLowerCase().includes(searchTags.value.toLowerCase());
+    if (searchTags.value === null || searchTags.value === "") tagsMatch = true;
+
+    if (titleMatch && tagsMatch) filtered.push(doc);
+  }
+
+  return filtered;
 })
 
 const uniqueFolders = computed(() => {
   const set = new Set<string>();
   const noSearch = searchTitle.value === null || searchTitle.value === "";
-  documents.value.filter(d => d.folder !== "").forEach(d => {
-    if(noSearch || d.title.toLowerCase().includes(searchTitle.value.toLowerCase())) {
+  documents.value.filter(d => d.folder !== "").forEach(doc => {
+    /*if(noSearch || d.title.toLowerCase().includes(searchTitle.value.toLowerCase())) {
       set.add(d.folder);
-    }
+    }*/
+    let titleMatch = doc.title.toLowerCase().includes(searchTitle.value.toLowerCase());
+    if (searchTitle.value === null || searchTitle.value === "") titleMatch = true;
+
+    let tagsMatch = doc.tags.toLowerCase().includes(searchTags.value.toLowerCase());
+    if (searchTags.value === null || searchTags.value === "") tagsMatch = true;
+
+    if (titleMatch && tagsMatch) set.add(doc.folder);
   })
   return Array.from(set);
 })
@@ -130,3 +172,11 @@ onMounted(() => {
 })
 //@request.auth.id != "" && (owner ?= @request.auth.id || editor.id ?=  @request.auth.id) 
 </script>
+
+<style scoped>
+.active-doc {
+  font-weight: bold;
+  padding-left: 10px;
+  color: var(--q-primary);
+}
+</style>

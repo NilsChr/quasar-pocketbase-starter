@@ -32,13 +32,14 @@ export const useDBStore = defineStore("dbStore", {
       activeDoc: null,
       documentData: "",
       searchTitle: "",
-      searchTags: ""
+      searchTags: "",
     } as IDBStore),
   getters: {
     signedIn: (state): boolean => state.client.authStore.isValid,
   },
   actions: {
     async createDocument() {
+      this.loading = true;
       const metaID = generateId();
       const dataID = generateId();
 
@@ -56,46 +57,14 @@ export const useDBStore = defineStore("dbStore", {
 
       const dataRecord = await client
         .collection("documentsData")
-        .create({ id:dataID, data: "", metaId: record.id });
+        .create({ id: dataID, data: "", metaId: record.id });
 
-        await client.collection("documentsMeta").update(metaID, {dataId: dataID});
-
-      
-      this.loading = false;
-      this.loadDocuments();
-
-      /* OLD
-      this.loading = true;
-      const metaID = generateId();
-      const dataID = generateId();
-
-      const dataRecord = await client
-        .collection("documentsData")
-        .create({ id:dataID, data: "", metaId: metaID });
-
-      const metaData = {
-        id: metaID,
-        title: "New Document",
-        dataId: dataRecord.id,
-        owner: useUserStore().userID,
-        editors: [],
-        viewers: [],
-        tags: "",
-        projectTag: "",
-      };
-
-      
-      const record = await client.collection("documentsMeta").create(metaData);
-      const updates = {
-        metaId: record.id
-      }
-      console.log('Updating', updates);
-      console.log('To ', record.dataId);
-    //  await client.collection("documentsData").update(record.dataId, updates);
+      await client
+        .collection("documentsMeta")
+        .update(metaID, { dataId: dataID });
 
       this.loading = false;
       this.loadDocuments();
-      */
     },
     async loadDocuments() {
       this.loading = true;
@@ -106,7 +75,6 @@ export const useDBStore = defineStore("dbStore", {
     async loadDocumentdata(id: string) {
       this.loading = true;
       const record = await client.collection("documentsData").getOne(id);
-      console.log("loaded", record)
       this.loading = false;
       this.documentData = record.data;
     },
@@ -142,12 +110,12 @@ export const useDBStore = defineStore("dbStore", {
       this.loading = false;
     },
     async deleteDocument(id: string) {
-        this.loading = true;
-        await client.collection("documentsMeta").delete(id);
-        this.activeDoc = null;
-        this.loading = false;
-        this.loadDocuments();
-    }
+      this.loading = true;
+      await client.collection("documentsMeta").delete(id);
+      this.activeDoc = null;
+      this.loading = false;
+      this.loadDocuments();
+    },
   },
 });
 

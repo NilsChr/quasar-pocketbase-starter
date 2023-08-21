@@ -1,6 +1,6 @@
 <template>
     <div class="row column full-width fill-height" v-if="activeDoc">
-        <div class="row col-auto ">
+        <div class="row col-auto " v-if="!loading">
             <div class="row col-12 ">
                 <div class="col-6 col-xs-12">
                     <EditableText :value="title" label="Title" icon="title" @changed="onTitleChanged" />
@@ -29,10 +29,13 @@
             </div>
         </div>
 
-        <div class="row col full-height">
+        <div class="row col full-height" v-if="!loading">
             <md-editor v-if="editMode" v-model="documentData" @onChange="" @onUploadImg="onUploadImg" language="en-US"
                 class="full-height" />
-            <MdPreview  class="full-height" v-else :modelValue="documentData" language="en-US"/>
+            <MdPreview class="full-height" v-else :modelValue="documentData" language="en-US" />
+        </div>
+        <div class="row col full-height justify-center align-center items-center" v-else>
+            <q-spinner size="3em" :thickness="2" />
         </div>
     </div>
     <div v-else class="row justify-center align-center items-center fill-height full-width">
@@ -115,13 +118,13 @@ const deleteDocument = async () => {
 
 const setStyle = () => {
     if (window.innerWidth > 599.99) return;
-    
+
     setTimeout(() => {
         const el: HTMLElement = <HTMLElement>document.querySelector("#md-editor-v3-preview-wrapper");
         if (!el) {
             return;
         };
-    
+
         if (editMode.value === true) {
             el.style.display = 'none'
         } else el.style.display = 'block'
