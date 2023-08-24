@@ -1,20 +1,20 @@
 {
-  "name": "blogal-2",
+  "name": "quasar-pocketbase-starter",
   "version": "0.0.1",
-  "description": "Blogal",
-  "productName": "Note taking app",
+  "description": "quasar-pocketbase-starter",
+  "productName": "quasar-pocketbase-starter",
   "author": "Nils Christian Bogen <nils.chr.bogen@gmail.com>",
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "logo": "icongenie generate -i logo-template.png"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@vueuse/core": "^9.2.0",
     "core-js": "^3.6.5",
-    "md-editor-v3": "^4.3.0",
     "pinia": "^2.0.11",
     "pocketbase": "^0.16.0",
     "quasar": "^2.6.0",

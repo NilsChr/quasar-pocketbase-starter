@@ -1,15 +1,12 @@
 <template>
   <q-page class="row full-height full-width">
-    <editor :document-id="activeDoc" />
+      Index Page
+      <settings />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import Editor from 'src/components/Editor.vue';
-import { useDBStore } from 'src/stores/dbStore';
+import Settings from './Settings.vue';
 
-const dbStore = useDBStore();
-const { activeDoc } = storeToRefs(dbStore);
 
 </script>

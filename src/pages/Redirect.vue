@@ -1,22 +1,25 @@
 <template>
     <div class="container fluid full-height ">
         <div class="row full-height justify-center align-center items-center">
-            <pre id="content">Authenticating...</pre>
+            <pre id="content">Authenticating{{ dots }}</pre>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { useDBStore } from 'src/stores/dbStore';
-import { useUserStore } from 'src/stores/userStore';
+import { usePBStore } from 'src/stores/pbStore';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from 'vue';
 
-const dbStore = useDBStore();
-const userStore = useUserStore();
-const client = dbStore.client;
+const dbStore = usePBStore();
+const { userData } = storeToRefs(dbStore);
 const router = useRouter();
 
 const redirectUrl = process.env.BASE_URL + '/redirect';
 const params = (new URL(window.location.href)).searchParams;
+
+const dots = ref<string>("");
+let dotsCounter = 0;
 
 const provider = JSON.parse(localStorage.getItem('provider')!)
 if (provider.state !== params.get("state")) {
@@ -25,8 +28,8 @@ if (provider.state !== params.get("state")) {
 
 async function checkAuth() {
     try {
-
-        const userData = await client.collection('users').authWithOAuth2(
+   
+        userData.value = await dbStore.client?.collection('users').authWithOAuth2Code(
             provider.name,
             params.get("code")!,
             provider.codeVerifier,
@@ -41,16 +44,9 @@ async function checkAuth() {
         let url_parts = url.toString().split('redirect');
         history.pushState(null, document.title, url_parts[0]);
         if (userData !== undefined) {
-            console.log(userData)
-            // SET USERDATA
-            userStore.userID = userData.record!.id;
-            userStore.userAvatar = userData.record!.avatar;
-            userStore.username = userData.record!.username || userData.record!.name;
-            
             router.push({ path: "/dashboard" });
         }
     } catch (e) {
-        console.log('Err', e);
         router.push({ path: "/" });
         throw e;
     }
@@ -58,6 +54,15 @@ async function checkAuth() {
 }
 
 checkAuth();
+
+onMounted(() => {
+    setInterval(function() {
+        dotsCounter++;
+        if(dotsCounter > 3) dotsCounter = 0;
+
+        dots.value = new Array(dotsCounter).fill(".").join("");
+    }, 250)
+})
 
 </script>
 <style>
@@ -70,5 +75,9 @@ body {
 #q-app {
     height: 100%;
     width: 100%;
+}
+
+#content {
+  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 </style>

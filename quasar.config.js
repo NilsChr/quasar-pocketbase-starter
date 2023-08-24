@@ -48,13 +48,11 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
+      
       vueRouterMode: 'history', // available values: 'hash', 'history',
       env: {
-       // API: "https://blogal.pockethost.io",
-       // BASE_URL:"http://localhost:8080" 
-
-        API: ctx.dev ? "https://blogal.pockethost.io" : "https://blogal.pockethost.io",
-        BASE_URL: ctx.dev ? "http://localhost:8080" : "https://blogal-2.onrender.com"
+       POCKETBASE_URL: ctx.dev ? "https://blogal.pockethost.io" : "https://blogal.pockethost.io",
+       BASE_URL: ctx.dev ? "http://localhost:8080" : "https://blogal-2.onrender.com"
       }
 
       // transpile: false,
@@ -110,7 +108,11 @@ module.exports = configure(function (ctx) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: [],
+    animations: [
+      'fadeIn',
+      'fadeOut',
+      'slideInLeft'
+    ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/developing-ssr/configuring-ssr
     ssr: {
@@ -143,8 +145,8 @@ module.exports = configure(function (ctx) {
       // chainWebpackCustomSW (/* chain */) {},
 
       manifest: {
-        name: `Note taking app`,
-        short_name: `Note taking app`,
+        name: `TODO - TITLE`,
+        short_name: `TODO - TITLE`,
         description: ``,
         display: 'standalone',
         orientation: 'portrait',
@@ -210,7 +212,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'blogal-2'
+        appId: 'TODO - SET APP ID'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

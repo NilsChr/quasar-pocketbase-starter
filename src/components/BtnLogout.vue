@@ -1,16 +1,20 @@
 <template>
-    <div>
-        {{ userData }}
-        <btn-logout />
-    </div>
+    <q-btn @click="logout">Logout</q-btn>
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import BtnLogout from 'src/components/BtnLogout.vue';
 import { usePBStore } from 'src/stores/pbStore';
+import { useRouter } from 'vue-router';
 
 const pbStore = usePBStore();
+
 const { userData } = storeToRefs(pbStore);
 
+const router = useRouter();
+
+const logout = () => {
+    userData.value = undefined;
+    router.push({ path: "/" });
+}
 
 </script>
