@@ -5,16 +5,16 @@ A template with basic login functionality for a pocketbase app.
 ## Setup with pocketbase
 
 Add Pocketbase URL to quasar.config.json
-```json
-      env: {
-       POCKETBASE_URL: ctx.dev ? TEST-URL : PROD-URL,
-       BASE_URL: ctx.dev ? "http://localhost:8080" : PROD-PAGE
-      }
+```javascript
+env: {
+    POCKETBASE_URL: ctx.dev ? TEST-URL : PROD-URL,
+    BASE_URL: ctx.dev ? "http://localhost:8080" : PROD-PAGE
+}
 ```
 
 ## Generate Icon
 
-Replace logo-template.png in the project root directory.
+Replace logo-template.png in the project root directory and run command to generate images
 ```bash
 npm run logo
 ```
