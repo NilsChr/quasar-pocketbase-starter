@@ -2,7 +2,7 @@
 
 A template with basic login functionality for a pocketbase app.
 
-Contains a Landing page with a Login and Signup component. 
+Contains a Landing page with a Login and Signup component.\ 
 The Vue router is configured to enforce authentication for access. Specifically, unauthenticated users are restricted to the landing page (/).
 
 ## Install the dependencies
@@ -33,7 +33,7 @@ env: {
 
 ## Generate Icon
 
-Replace logo-template.png in the project root directory and run command to generate images
+Replace logo-template.png in the project root directory and run command to generate images\
 Requires [Icon Genie CLI](https://quasar.dev/icongenie/introduction/)
 ```bash
 npm run logo
