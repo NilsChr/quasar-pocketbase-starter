@@ -2,8 +2,8 @@
 
 A template with basic login functionality for a pocketbase app.
 
-Contains a Landing page with a Login and Signup component.\ 
-The Vue router is configured to enforce authentication for access.\ 
+Contains a Landing page with a Login and Signup component. \ 
+The Vue router is configured to enforce authentication for access. \ 
 Specifically, unauthenticated users are restricted to the landing page (/).
 
 ## Install the dependencies
