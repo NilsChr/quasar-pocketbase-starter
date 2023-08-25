@@ -1,8 +1,10 @@
 <template>
     <div class="xs-row sm-column" v-if="!loading">
-        <form>
+
+        <!-- LOGIN -->
+        <form v-if="!createAccountMode">
             <div class="row justify-center">
-                <h5 class="font-bold q-ma-xs">Login with email</h5>
+                <h5 class="font-bold q-ma-xs">Login</h5>
             </div>
             <div class="row q-ma-sm">
                 <q-input class="full-width" v-model="email" label="Email" dense outlined></q-input>
@@ -12,13 +14,21 @@
                     outlined autocomplete="on"></q-input>
             </div>
             <div class="row justify-center q-ma-sm">
-                <q-btn type="submit" unelevated class="full-width" color="primary" @click="authWithPassword">Login</q-btn>
+                <q-btn unelevated class="full-width" color="primary" @click="authWithPassword">Login</q-btn>
+            </div>
+            <div class="row justify-center q-ma-sm q-mt-lg">
+                <q-btn unelevated class="full-width" color="primary" @click="createAccountMode = true">Create
+                    Account</q-btn>
             </div>
         </form>
 
-        <div class="separator q-mt-lg q-mb-lg">or</div>
+        <!-- SIGN UP -->
+        <signup v-if="createAccountMode" @on-created="createAccountMode = false;" @on-cancel="createAccountMode = false"/>
 
-        <div class="row justify-center q-ma-sm" v-if="authProviders.length > 0">
+        <div class="separator q-mt-lg q-mb-lg" v-if="!createAccountMode">or</div>
+
+        <!-- OAUTH 2 -->
+        <div class="row justify-center q-ma-sm" v-if="authProviders.length > 0 && !createAccountMode">
             <transition-group appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
 
                 <q-btn class="full-width q-ma-xs" v-for="provider of authProviders" @click="authWithOAuth2(provider)"
@@ -41,28 +51,25 @@
     </div>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { AuthProviderInfo } from "pocketbase";
 import { usePBStore } from "src/stores/pbStore";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import Signup from "./Signup.vue"
 
 const router = useRouter();
-
 const pbStore = usePBStore();
-const { userData } = storeToRefs(pbStore);
-
 const authProviders = ref<AuthProviderInfo[]>([])
-
 const email = ref<string>("");
 const password = ref<string>("");
-
 const loading = ref<boolean>(false);
+const createAccountMode = ref<boolean>(false);
+
 
 const authWithPassword = async () => {
     if (pbStore.client === null) return;
     try {
-        userData.value = await pbStore.client.collection('users').authWithPassword(email.value, password.value);
+        await pbStore.client.collection('users').authWithPassword(email.value, password.value);
         router.push({ path: "/dashboard" });
     } catch (error) {
         console.log(error)
@@ -94,12 +101,14 @@ onMounted(async () => {
     align-items: center;
     text-align: center;
 }
+
 .separator::before,
 .separator::after {
     content: '';
     flex: 1;
     border-bottom: 1px solid #E0E0E0;
 }
+
 .separator::before {
     margin-right: .5em;
 }

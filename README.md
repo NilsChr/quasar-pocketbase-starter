@@ -2,7 +2,20 @@
 
 A template with basic login functionality for a pocketbase app.
 
-## Setup with pocketbase
+
+## Install the dependencies
+```bash
+yarn
+# or
+npm install
+```
+
+### Start the app in development mode (hot-code reloading, error reporting, etc.)
+```bash
+quasar dev
+```
+
+## Connect to pocketbase instance
 
 Add Pocketbase URL to quasar.config.json
 ```javascript
@@ -19,23 +32,10 @@ Replace logo-template.png in the project root directory and run command to gener
 npm run logo
 ```
 
-## Install the dependencies
-```bash
-yarn
-# or
-npm install
-```
-
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
-
-
-### Build the app for production
+## Build the app for production
 ```bash
 quasar build
 ```
 
-### Customize the configuration
+## Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).

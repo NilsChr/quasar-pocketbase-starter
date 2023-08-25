@@ -1,34 +1,35 @@
 import { defineStore } from "pinia";
-import PocketBase, { RecordAuthResponse } from "pocketbase";
+import PocketBase, { RecordAuthResponse, Record, Admin } from "pocketbase";
 
 export interface IDBStore {
   client: PocketBase | null;
   userData: RecordAuthResponse | undefined;
+  currentUser: Record | Admin | null;
 }
 
 export const usePBStore = defineStore("pbStore", {
   state: () =>
     ({
       client: null,
-      userData: undefined
+      currentUser: null
     } as IDBStore),
   getters: {
-    signedIn: (state): boolean => state.client?.authStore.isValid || false,
   },
   actions: {
     async init() {
-
       const client = new PocketBase(process.env.POCKETBASE_URL);
       this.client = client;
 
       client.authStore.onChange(() => {
-        console.log("Auth Store Change");
-        console.log(client.authStore.model);
-      });
+        this.currentUser = client.authStore.model;
+      }, true);
+    },
+    async logout() {
+      this.client?.authStore.clear();
     },
     async createDocument() {
       const data = {
-        foo: "baar",
+        foo: "bar",
       };
       const record = await this.client?.collection("demo").create(data);
     },
